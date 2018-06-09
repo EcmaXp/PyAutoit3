@@ -1,7 +1,32 @@
 from enum import Enum, IntEnum
 
 
-class MouseButtonType(str, Enum):
+class Command(str, Enum):
+    IsVisible = 'IsVisible'
+    IsEnabled = 'IsEnabled'
+    ShowDropDown = 'ShowDropDown'
+    HideDropDown = 'HideDropDown'
+    AddString = 'AddString'
+    DelString = 'DelString'
+    FindString = 'FindString'
+    SetCurrentSelection = 'SetCurrentSelection'
+    SelectString = 'SelectString'
+    IsChecked = 'IsChecked'
+    Check = 'Check'
+    UnCheck = 'UnCheck'
+    GetCurrentLine = 'GetCurrentLine'
+    GetCurrentCol = 'GetCurrentCol'
+    GetCurrentSelection = 'GetCurrentSelection'
+    GetLineCount = 'GetLineCount'
+    GetLine = 'GetLine'
+    GetSelected = 'GetSelected'
+    EditPaste = 'EditPaste'
+    CurrentTab = 'CurrentTab'
+    TabRight = 'TabRight'
+    TabLeft = 'TabLeft'
+
+
+class ClickType(str, Enum):
     Left = "left"
     Right = "right"
     Middle = "middle"
@@ -9,7 +34,6 @@ class MouseButtonType(str, Enum):
     Menu = "menu"
     Primary = "Primary"
     Secondary = "Secondary"
-
 
 
 class MouseWheelDirectionType(str, Enum):

@@ -1,5 +1,3 @@
-from enum import Enum
-
 from .dll.functions import auto_it_set_option
 
 __all__ = ["Option"]
@@ -11,13 +9,16 @@ class Option:
         self.value = None
 
     def __get__(self, instance, owner) -> int:
-        if self.value is None:
-            self.value = auto_it_set_option(self.name, 0)
-            auto_it_set_option(self.name, self.value)
+        value = self.value
+        if value is None:
+            value = auto_it_set_option(self.name, 0)
+            auto_it_set_option(self.name, value)
+            self.value = value
 
-        return self.value
+        return value
 
-    def __set__(self, instance, value):
+    def __set__(self, instance, value: int):
+        auto_it_set_option(self.name, value)
         self.value = value
 
 
