@@ -1,14 +1,11 @@
 import ctypes
 import os
 
+from ..exception import AutoitError
 from .prototype import API_PROTOTYPE, AU3_PROTOTYPE
 
 
-class Autoit3Error(Exception):
-    pass
-
-
-class Autoit3NativeAPI:
+class AutoitNativeAPI:
     def __init__(self, dll_name):
         self.dll_name = dll_name
         self.dll = ctypes.WinDLL(dll_name)
@@ -22,7 +19,7 @@ class Autoit3NativeAPI:
     def errcheck(self, res, func, args):
         code = self.AU3_error()
         if code != 0:
-            raise Autoit3Error(code)
+            raise AutoitError(code)
 
         return res
 
@@ -40,9 +37,9 @@ class Autoit3NativeAPI:
     @classmethod
     def load(cls):
         # TODO: 32 bit or 64 bit
-        path = os.path.abspath(os.path.join(__file__, "../data", "AutoitX3_x64.dll"))
+        path = os.path.abspath(os.path.join(__file__, "../library", "AutoitX3_x64.dll"))
         return cls(path)
 
 
-API = Autoit3NativeAPI.load()
+API = AutoitNativeAPI.load()
 AU3_INTDEFAULT = -2147483647

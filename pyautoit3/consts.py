@@ -1,5 +1,7 @@
 from enum import Enum, IntEnum
 
+__all__ = "Command", "Click", "MouseWheelDirection", "CommandShow"
+
 
 class Command(str, Enum):
     IsVisible = 'IsVisible'
@@ -26,7 +28,7 @@ class Command(str, Enum):
     TabLeft = 'TabLeft'
 
 
-class ClickType(str, Enum):
+class Click(str, Enum):
     Left = "left"
     Right = "right"
     Middle = "middle"
@@ -36,13 +38,22 @@ class ClickType(str, Enum):
     Secondary = "Secondary"
 
 
-class MouseWheelDirectionType(str, Enum):
+class MouseWheelDirection(str, Enum):
     Up = "up"
     Down = "down"
 
 
-class WindowsStatus(IntEnum):
+class CommandShow(IntEnum):
+    SW_HIDE = 0
     SW_SHOWNORMAL = 1
-
-
-SW_SHOWNORMAL = WindowsStatus.SW_SHOWNORMAL
+    SW_SHOWMINIMIZED = 2
+    SW_SHOWMAXIMIZED = 3
+    SW_MAXIMIZE = 3
+    SW_SHOWNOACTIVATE = 4
+    SW_SHOW = 5
+    SW_MINIMIZE = 6
+    SW_SHOWMINNOACTIVE = 7
+    SW_SHOWNA = 8
+    SW_RESTORE = 9
+    SW_SHOWDEFAULT = 10
+    SW_FORCEMINIMIZE = 11

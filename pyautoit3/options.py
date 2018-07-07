@@ -1,6 +1,6 @@
 from .dll.functions import auto_it_set_option
 
-__all__ = ["Option"]
+__all__ = "Options",
 
 
 class Option:

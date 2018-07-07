@@ -4,6 +4,8 @@ from typing import List
 
 from dataclasses import dataclass
 
+__all__ = "enum_windows",
+
 WNDENUMPROC = ctypes.WINFUNCTYPE(wintypes.BOOL,
                                  wintypes.HWND,
                                  wintypes.LPARAM)
@@ -28,14 +30,20 @@ class RawWindow:
     hwnd: wintypes.HWND
 
     @property
-    def title(self):
-        legnth = user32.GetWindowTextLengthW(self.hwnd)
-        buffer = ctypes.create_unicode_buffer(legnth)
-        user32.GetWindowTextW(self.hwnd, buffer)
+    def pid(self) -> int:
+        pid = ctypes.c_ulong(0)
+        user32.GetWindowThreadProcessId(self.hwnd, ctypes.byref(pid))
+        return pid.value
+
+    @property
+    def title(self) -> str:
+        length = user32.GetWindowTextLengthW(self.hwnd) + 1
+        buffer = ctypes.create_unicode_buffer(length)
+        user32.GetWindowTextW(self.hwnd, buffer, length)
         return buffer.value
 
     @property
-    def class_name(self):
+    def class_name(self) -> str:
         length = 1024
         buffer = ctypes.create_unicode_buffer(length)
         user32.GetClassNameW(self.hwnd, buffer, length)

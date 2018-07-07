@@ -14,6 +14,8 @@ from ..consts import *
 # noinspection PyUnresolvedReferences
 from ..types import *
 
+SW_SHOWNORMAL = CommandShow.SW_SHOWNORMAL
+
 shared_buffer_mode = True
 last_buffer = None
 

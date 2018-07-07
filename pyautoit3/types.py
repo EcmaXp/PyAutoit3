@@ -1,17 +1,26 @@
-import ctypes
 import operator
 from ctypes.wintypes import RECT, POINT
-from typing import Callable, Union
+from typing import Callable
 
 from dataclasses import dataclass
 
-from pyautoit3.dll.api import AU3_INTDEFAULT
+from .dll.api import AU3_INTDEFAULT
+
+__all__ = "Point", "Rect"
 
 
 @dataclass(frozen=True)
 class Point:
     x: int
     y: int
+
+    def zero(self) -> "Rect":
+        return Rect(
+            self.x,
+            self.y,
+            self.x,
+            self.y,
+        )
 
     @classmethod
     def from_wintypes(cls, point: POINT):
@@ -20,6 +29,16 @@ class Point:
             point.x,
             point.y,
         )
+
+    def to_wintypes(self):
+        point = POINT()
+        point.x = self.x,
+        point.y = self.y
+        return point
+
+    def __iter__(self):
+        yield self.x
+        yield self.y
 
     def __add__(self, other: "Point") -> "Point":
         if isinstance(other, Point):
@@ -39,25 +58,20 @@ class Point:
 
         return NotImplemented
 
-    def zero(self) -> "Rect":
-        return Rect(
-            self.x,
-            self.y,
-            self.x,
-            self.y,
-        )
-
-    def to_wintypes(self):
-        point = POINT()
-        point.x = self.x,
-        point.y = self.y
-        return point
-
-
 DEFAULT_POINT = Point(
     x=AU3_INTDEFAULT,
     y=AU3_INTDEFAULT,
 )
+
+
+@dataclass(frozen=True)
+class Size:
+    width: int
+    height: int
+
+    def __iter__(self):
+        yield self.width
+        yield self.height
 
 
 @dataclass(frozen=True)
@@ -66,16 +80,6 @@ class Rect:
     top: int
     right: int
     bottom: int
-
-    @classmethod
-    def from_wintypes(cls, rect: RECT):
-        # noinspection PyArgumentList
-        return cls(
-            rect.left,
-            rect.top,
-            rect.right,
-            rect.bottom,
-        )
 
     @property
     def width(self):
@@ -115,6 +119,10 @@ class Rect:
             max(self.bottom, self.bottom),
         )
 
+    @property
+    def size(self):
+        return Size(self.width, self.height)
+
     def _calc(self, other: "Rect", op: Callable[[int, int], int]) -> "Rect":
         return type(self)(
             op(self.left, other.left),
@@ -122,6 +130,30 @@ class Rect:
             op(self.right, other.right),
             op(self.bottom, other.bottom),
         )
+
+    @classmethod
+    def from_wintypes(cls, rect: RECT):
+        # noinspection PyArgumentList
+        return cls(
+            rect.left,
+            rect.top,
+            rect.right,
+            rect.bottom,
+        )
+
+    def to_wintypes(self):
+        rect = RECT()
+        rect.left = self.left
+        rect.top = self.top
+        rect.right = self.right
+        rect.bottom = self.bottom
+        return rect
+
+    def __iter__(self):
+        yield self.left
+        yield self.top
+        yield self.right
+        yield self.bottom
 
     def __add__(self, other: "Rect") -> "Rect":
         if isinstance(other, Rect):
@@ -140,11 +172,3 @@ class Rect:
             return obj.x in self.range_x and obj.y in self.range_y
 
         return NotImplemented
-
-    def to_wintypes(self):
-        rect = RECT()
-        rect.left = self.left
-        rect.top = self.top
-        rect.right = self.right
-        rect.bottom = self.bottom
-        return rect

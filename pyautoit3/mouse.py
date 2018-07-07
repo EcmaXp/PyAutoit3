@@ -1,11 +1,12 @@
-from .consts import ClickType
-from .consts import MouseWheelDirectionType
-from .dll import functions as au3
+from . import au3
+from .consts import Click, MouseWheelDirection
 from .types import Point, DEFAULT_POINT
+
+__all__ = "Mouse",
 
 
 class MouseButton:
-    def __init__(self, button: ClickType):
+    def __init__(self, button: Click):
         self.button = button
 
     def __call__(self, p: Point = DEFAULT_POINT, clicks=1, speed=-1):
@@ -32,26 +33,26 @@ class MouseButton:
 
 class MouseWheelButton(MouseButton):
     def __init__(self):
-        super().__init__(ClickType.Middle)
+        super().__init__(Click.Middle)
 
-    def wheel(self, direction: MouseWheelDirectionType, clicks):
+    def wheel(self, direction: MouseWheelDirection, clicks):
         au3.mouse_wheel(direction, clicks)
 
     def wheel_up(self, clicks):
-        self.wheel(MouseWheelDirectionType.Up, clicks)
+        self.wheel(MouseWheelDirection.Up, clicks)
 
     def wheel_down(self, clicks):
-        self.wheel(MouseWheelDirectionType.Down, clicks)
+        self.wheel(MouseWheelDirection.Down, clicks)
 
 
 class MouseType:
-    left = MouseButton(ClickType.Left)
-    right = MouseButton(ClickType.Right)
+    left = MouseButton(Click.Left)
+    right = MouseButton(Click.Right)
     middle = wheel = MouseWheelButton()
-    main = MouseButton(ClickType.Main)
-    menu = MouseButton(ClickType.Menu)
-    primary = MouseButton(ClickType.Primary)
-    secondary = MouseButton(ClickType.Secondary)
+    main = MouseButton(Click.Main)
+    menu = MouseButton(Click.Menu)
+    primary = MouseButton(Click.Primary)
+    secondary = MouseButton(Click.Secondary)
 
     @property
     def pos(self) -> Point:
