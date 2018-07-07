@@ -18,6 +18,12 @@ class Control:
         self.window = window
         self.hctrl = hctrl
 
+    def __eq__(self, other):
+        if isinstance(other, Control):
+            return self.window == other.window and self.hctrl == other.hctrl
+
+        return NotImplemented
+
     @property
     def hwnd(self):
         return self.window.hwnd
@@ -46,6 +52,9 @@ class Control:
         return au3.control_focus_by_handle(self.hwnd, self.hctrl)
 
     def command(self, command: Union[Command, str], option: str = ""):
+        if isinstance(command, Command):
+            command = command.value
+
         return au3.control_command_by_handle(self.hwnd, self.hctrl, command, option)
 
     def send(self, text):

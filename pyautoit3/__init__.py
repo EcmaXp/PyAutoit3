@@ -11,6 +11,6 @@ from .window import Window
 __all__ = ("au3", "AutoitError", "Control", "Mouse", "Options", "Process", "Window",
            "Point", "Rect", "Click", "Command", "CommandShow")
 
-__version__ = "1.1.2a0"
+__version__ = "1.1.3a0"
 
 au3.init()

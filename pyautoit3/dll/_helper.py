@@ -47,3 +47,7 @@ def build_point(pointer: wintypes.LPPOINT) -> Point:
 
 def build_rect(pointer: wintypes.LPRECT) -> Rect:
     return Rect.from_wintypes(pointer)
+
+
+def normalize_timeout(timeout: Optional[int], infinity):
+    return timeout if timeout is not None else infinity

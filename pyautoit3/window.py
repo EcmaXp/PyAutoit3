@@ -13,6 +13,12 @@ class Window:
     def __init__(self, hwnd: c_void_p):
         self.hwnd = hwnd
 
+    def __eq__(self, other):
+        if isinstance(other, Window):
+            return self.hwnd == other.hwnd
+
+        return False
+
     @classmethod
     def find(cls, title, text="") -> Optional["Window"]:
         try:
@@ -58,8 +64,11 @@ class Window:
         for self in cls.findall_raw(title=title, class_name=class_name):
             return self
 
-    def activate(self):
+    def activate(self, wait=False, timeout=0):
         au3.win_activate_by_handle(self.hwnd)
+
+        if wait:
+            self.wait_active(timeout=timeout)
 
     def is_active(self) -> int:
         return au3.win_active_by_handle(self.hwnd)
@@ -90,16 +99,16 @@ class Window:
     def set_on_top(self, flag):
         au3.win_set_on_top_by_handle(self.hwnd, flag)
 
-    def wait(self, timeout=0):
+    def wait(self, timeout=None):
         au3.win_wait_by_handle(self.hwnd, timeout)
 
-    def wait_active(self, timeout=0):
+    def wait_active(self, timeout=None):
         au3.win_wait_active_by_handle(self.hwnd, timeout)
 
     def wait_not_active(self):
         au3.win_wait_not_active_by_handle(self.hwnd)
 
-    def wait_close(self, timeout=0):
+    def wait_close(self, timeout=None):
         au3.win_wait_close_by_handle(self.hwnd, timeout)
 
     def find_control(self, control_text) -> Control:

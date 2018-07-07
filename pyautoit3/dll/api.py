@@ -1,8 +1,10 @@
 import ctypes
-import os
+import sys
+from importlib import resources
 
-from ..exception import AutoitError
+from . import library
 from .prototype import API_PROTOTYPE, AU3_PROTOTYPE
+from ..exception import AutoitError
 
 
 class AutoitNativeAPI:
@@ -36,9 +38,21 @@ class AutoitNativeAPI:
 
     @classmethod
     def load(cls):
-        # TODO: 32 bit or 64 bit
-        path = os.path.abspath(os.path.join(__file__, "../library", "AutoitX3_x64.dll"))
-        return cls(path)
+        dll_name = cls.get_dllname()
+        try:
+            with resources.path(library.__package__, dll_name) as path:
+                return cls(str(path.absolute()))
+        except FileNotFoundError:
+            return cls(dll_name)
+
+    @classmethod
+    def get_dllname(cls):
+        if sys.maxsize == 2 ** 31 - 1:
+            return "AutoitX3.dll"
+        elif sys.maxsize == 2 ** 63 - 1:
+            return "AutoitX3_x64.dll"
+        else:
+            raise Exception("unknown sys.maxsize")
 
 
 API = AutoitNativeAPI.load()

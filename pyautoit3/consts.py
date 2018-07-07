@@ -3,7 +3,7 @@ from enum import Enum, IntEnum
 __all__ = "Command", "Click", "MouseWheelDirection", "CommandShow"
 
 
-class Command(str, Enum):
+class Command(Enum):
     IsVisible = 'IsVisible'
     IsEnabled = 'IsEnabled'
     ShowDropDown = 'ShowDropDown'

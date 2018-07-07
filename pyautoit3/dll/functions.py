@@ -310,11 +310,13 @@ def process_set_priority(process: str, priority: int) -> int:
     return API.AU3_ProcessSetPriority(process, priority)
 
 
-def process_wait(process: str, timeout: int = 0) -> int:
+def process_wait(process: str, timeout: int = None) -> int:
+    timeout = normalize_timeout(timeout, 0)
     return API.AU3_ProcessWait(process, timeout)
 
 
-def process_wait_close(process: str, timeout: int = 0) -> int:
+def process_wait_close(process: str, timeout: int = None) -> int:
+    timeout = normalize_timeout(timeout, 0)
     return API.AU3_ProcessWaitClose(process, timeout)
 
 
@@ -565,33 +567,41 @@ def win_set_trans_by_handle(hwnd: wintypes.HWND, trans: int) -> int:
     return API.AU3_WinSetTransByHandle(hwnd, trans)
 
 
-def win_wait(title: str, text: str = '', timeout: int = 0) -> int:
+def win_wait(title: str, text: str = '', timeout: int = None) -> int:
+    timeout = normalize_timeout(timeout, 0)
     return API.AU3_WinWait(title, text, timeout)
 
 
 def win_wait_by_handle(hwnd: wintypes.HWND, timeout: int) -> int:
+    timeout = normalize_timeout(timeout, None)
     return API.AU3_WinWaitByHandle(hwnd, timeout)
 
 
-def win_wait_active(title: str, text: str = '', timeout: int = 0) -> int:
+def win_wait_active(title: str, text: str = '', timeout: int = None) -> int:
+    timeout = normalize_timeout(timeout, 0)
     return API.AU3_WinWaitActive(title, text, timeout)
 
 
 def win_wait_active_by_handle(hwnd: wintypes.HWND, timeout: int) -> int:
+    timeout = normalize_timeout(timeout, None)
     return API.AU3_WinWaitActiveByHandle(hwnd, timeout)
 
 
-def win_wait_close(title: str, text: str = '', timeout: int = 0) -> int:
+def win_wait_close(title: str, text: str = '', timeout: int = None) -> int:
+    timeout = normalize_timeout(timeout, 0)
     return API.AU3_WinWaitClose(title, text, timeout)
 
 
 def win_wait_close_by_handle(hwnd: wintypes.HWND, timeout: int) -> int:
+    timeout = normalize_timeout(timeout, None)
     return API.AU3_WinWaitCloseByHandle(hwnd, timeout)
 
 
-def win_wait_not_active(title: str, text: str = '', timeout: int = AU3_INTDEFAULT) -> int:
+def win_wait_not_active(title: str, text: str = '', timeout: int = None) -> int:
+    timeout = normalize_timeout(timeout, AU3_INTDEFAULT)
     return API.AU3_WinWaitNotActive(title, text, timeout)
 
 
-def win_wait_not_active_by_handle(hwnd: wintypes.HWND, timeout: int = 0) -> int:
+def win_wait_not_active_by_handle(hwnd: wintypes.HWND, timeout: int = None) -> int:
+    timeout = normalize_timeout(timeout, 0)
     return API.AU3_WinWaitNotActiveByHandle(hwnd, timeout)
